@@ -144,11 +144,11 @@ function App() {
           <div className="p-4 sm:p-6">
             {/* Item Header */}
             <div className="text-center mb-6 sm:mb-8">
-              <h3 className="text-xl font-bold text-white mb-2">Clockwork's Shades</h3>
-              <p className="text-gray-400 text-sm mb-1">RAP: 1.9M</p>
-              <p className="text-gray-400 text-sm mb-6">Buyer: twizwound</p>
+              <h3 className="text-xl font-bold text-white mb-2">Playful Vampire</h3>
+              <p className="text-gray-400 text-sm mb-1">RAP: 101K+</p>
+              <p className="text-gray-400 text-sm mb-6">Buyer: unknown</p>
               
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">$10,000<span className="text-gray-400">.00</span></div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">$295<span className="text-gray-400">.00</span></div>
               
               <p className="text-gray-300 text-sm mb-6 sm:mb-8">Please select a payment method:</p>
             </div>
@@ -215,7 +215,7 @@ function App() {
               <p className="text-gray-400 text-sm mb-1">RAP: 1.9M</p>
               <p className="text-gray-400 text-sm mb-6">Buyer: twizwound</p>
               
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">$10,000<span className="text-gray-400">.00</span></div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">$295<span className="text-gray-400">.00</span></div>
               
               <p className="text-gray-300 text-sm leading-relaxed mb-6 sm:mb-8 max-w-lg mx-auto px-2">
                 You should only send {selectedPayment.toUpperCase()} to this address. If you attempt to send any other 
@@ -717,7 +717,7 @@ function App() {
                 <div className="text-right">
                   <div className="text-gray-400 text-xs sm:text-sm">Total</div>
                   <div className="text-red-400 text-lg sm:text-2xl font-bold">
-                    ${currentStep === 1 ? '295' : '10,000'}.00
+                    ${currentStep === 1 ? '295' : '295'}.00
                   </div>
                 </div>
               </div>
