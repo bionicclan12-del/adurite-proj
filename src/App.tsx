@@ -545,25 +545,25 @@ function App() {
           <div className="w-full h-32 sm:h-40 rounded-lg mb-3 overflow-hidden bg-[#1c1c1c] flex items-center justify-center">
             <img
               src={robluxface}
-              alt="Silver Punk Face"
+              alt="Playful Vampire"
               className="max-h-24 sm:max-h-36 object-contain"
             />
           </div>
 
           {/* Title */}
           <h3 className="text-white font-semibold mb-2 text-sm sm:text-base text-center">
-            Silver Punk Face
+            Playful Vampire
           </h3>
 
           {/* RAP & Price */}
           <div className="flex justify-between items-center text-center">
             <div>
               <div className="text-red-400 text-xs sm:text-sm font-semibold">RAP</div>
-              <div className="text-white font-bold text-sm sm:text-base">290K</div>
+              <div className="text-white font-bold text-sm sm:text-base">101K+</div>
             </div>
             <div>
               <div className="text-red-400 text-xs sm:text-sm font-semibold">Price</div>
-              <div className="text-white font-bold text-sm sm:text-base">$1,251</div>
+              <div className="text-white font-bold text-sm sm:text-base">$295</div>
             </div>
           </div>
 
@@ -705,19 +705,19 @@ function App() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg sm:text-xl font-bold text-white">
-                    {currentStep === 1 ? 'Silver Punk Face' : 'Clockwork\'s Shades'}
+                    {currentStep === 1 ? 'Playful Vampire' : 'Clockwork\'s Shades'}
                   </h3>
                   <p className="text-gray-400 text-sm">
-                    RAP: {currentStep === 1 ? '290K' : '1.9M'}
+                    RAP: {currentStep === 1 ? '101K+' : '1.9M'}
                   </p>
                   <p className="text-gray-400 text-sm">
-                    {currentStep === 1 ? 'Seller: bro1010' : 'Buyer: twizwound'}
+                    {currentStep === 1 ? 'Seller: bro1010' : 'Buyer: roblox'}
                   </p>
                 </div>
                 <div className="text-right">
                   <div className="text-gray-400 text-xs sm:text-sm">Total</div>
                   <div className="text-red-400 text-lg sm:text-2xl font-bold">
-                    ${currentStep === 1 ? '1,251' : '10,000'}.00
+                    ${currentStep === 1 ? '295' : '10,000'}.00
                   </div>
                 </div>
               </div>
