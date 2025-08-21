@@ -12,6 +12,9 @@ import litcoin from './assets/litcoin.png'
 import ethereum from './assets/etheruim.png'
 import crypto3 from './assets/crypto 3.png'
 import crypto4 from './assets/crypto4.png'
+import litecoin from './assets/litecoin.png'
+import qrcode from './assets/bitcoin-qrcode.png'
+import eth  from './assets/eth-qrcode.png'
 
 import { useState, useEffect } from 'react';
 import { 
@@ -70,6 +73,22 @@ function App() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
   };
+
+  const paymentInfo: Record<string, { address: string; qr: string }> = {
+  bitcoin: {
+    address: "bc1q9ajlqrj83luxykz3lfqvjpet8l80n4q0js4ppw",
+    qr: qrcode,
+  },
+  litecoin: {
+    address: "LUE7m62uBe1WzDKjPSPgbAokfzHtN1atwm",
+    qr: litecoin,
+  },
+  crypto: {
+    address: "0xCA334c1f9aF04BC525b1D1E86c88d25A927B09b3",
+    qr: eth,
+  },
+};
+
 
   const getStepContent = () => {
     switch (currentStep) {
@@ -225,11 +244,13 @@ function App() {
             </div>
 
             {/* QR Code */}
+            {/* QR Code */}
+            {/* QR Code */}
             <div className="flex justify-center mb-6">
               <div className="w-40 h-40 sm:w-48 sm:h-48 bg-white p-3 sm:p-4 rounded-lg">
                 <img 
-                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ltclQ7guhtduwg9ka74zz7x6a6dk1t2rtg7nexmwc" 
-                  alt="QR Code" 
+                  src={paymentInfo[selectedPayment]?.qr} 
+                  alt={`${selectedPayment} QR Code`} 
                   className="w-full h-full"
                 />
               </div>
@@ -238,15 +259,19 @@ function App() {
             {/* Wallet Address */}
             <div className="mb-6 text-center px-2">
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-3 max-w-md mx-auto">
-                <span className="text-white text-xs sm:text-sm font-mono bg-transparent text-center break-all">ltclQ7guhtduwg9ka74zz7x6a6dk1t2rtg7nexmwc</span>
+                <span className="text-white text-xs sm:text-sm font-mono bg-transparent text-center break-all">
+                  {paymentInfo[selectedPayment]?.address}
+                </span>
                 <button
-                  onClick={() => copyToClipboard('ltclQ7guhtduwg9ka74zz7x6a6dk1t2rtg7nexmwc')}
+                  onClick={() => copyToClipboard(paymentInfo[selectedPayment]?.address || "")}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition-colors whitespace-nowrap"
                 >
                   Copy
                 </button>
               </div>
             </div>
+
+
 
             {/* Back Button */}
             <div className="flex justify-center mb-6">
@@ -558,11 +583,9 @@ function App() {
             <div>
               <div className="text-red-400 text-xs sm:text-sm font-semibold">RAP</div>
               <div className="text-white font-bold text-sm sm:text-base">101K+</div>
-              <div className="text-white font-bold text-sm sm:text-base">101K+</div>
             </div>
             <div>
               <div className="text-red-400 text-xs sm:text-sm font-semibold">Price</div>
-              <div className="text-white font-bold text-sm sm:text-base">$295</div>
               <div className="text-white font-bold text-sm sm:text-base">$295</div>
             </div>
           </div>
@@ -706,10 +729,8 @@ function App() {
                 <div className="flex-1">
                   <h3 className="text-lg sm:text-xl font-bold text-white">
                     {currentStep === 1 ? 'Playful Vampire' : 'Clockwork\'s Shades'}
-                    {currentStep === 1 ? 'Playful Vampire' : 'Clockwork\'s Shades'}
                   </h3>
                   <p className="text-gray-400 text-sm">
-                    RAP: {currentStep === 1 ? '101K+' : '1.9M'}
                     RAP: {currentStep === 1 ? '101K+' : '1.9M'}
                   </p>
                   <p className="text-gray-400 text-sm">
