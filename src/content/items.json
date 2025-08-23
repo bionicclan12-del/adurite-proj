@@ -1,0 +1,208 @@
+{
+  "site": {
+    "title": "Adurite",
+    "description": "Gaming marketplace for limited items and skins"
+  },
+  "header": {
+    "navigation": [
+      {
+        "label": "Market",
+        "url": "https://adurite.com/"
+      },
+      {
+        "label": "Support", 
+        "url": "https://adurite.com/market/dota2"
+      },
+      {
+        "label": "Affiliate",
+        "url": "https://adurite.com/market/transactions/aff-analytics"
+      },
+      {
+        "label": "Claims",
+        "url": "https://adurite.com/claims"
+      }
+    ],
+    "discordButton": {
+      "text": "Discord",
+      "enabled": true
+    },
+    "loginButton": {
+      "text": "Log in"
+    }
+  },
+  "gameCategories": [
+    {
+      "name": "Limiteds",
+      "image": "/src/assets/limiteds.png",
+      "url": "https://adurite.com/"
+    },
+    {
+      "name": "CS:2", 
+      "image": "/src/assets/CS2.png",
+      "url": "https://adurite.com/market/csgo"
+    },
+    {
+      "name": "DOTA2",
+      "image": "/src/assets/DOTA2.png", 
+      "url": "https://adurite.com/market/dota2"
+    },
+    {
+      "name": "Rust",
+      "image": "/src/assets/rust.png",
+      "url": "https://adurite.com/market/rust"
+    },
+    {
+      "name": "In-Game",
+      "image": "/src/assets/ingame.png",
+      "url": "https://roskins.com/"
+    }
+  ],
+  "trustpilot": {
+    "leftText": "Our customers say",
+    "rating": "4.2 out of 5 based on 531 reviews",
+    "mobileReviews": [
+      {
+        "text": "Our customers say"
+      },
+      {
+        "text": "4.2 out of 5 based on 531 reviews"
+      },
+      {
+        "text": "Trusted by thousands",
+        "subtitle": "Secure & Fast Trading"
+      }
+    ]
+  },
+  "hero": {
+    "bannerImage": "/src/assets/banner-roblux.png"
+  },
+  "profile": {
+    "username": "bro1010"
+  },
+  "limiteds": {
+    "sectionTitle": "LIMITEDS",
+    "items": [
+      {
+        "id": "playful-vampire",
+        "name": "Playful Vampire",
+        "image": "/src/assets/roblux-face.png",
+        "rap": "101K+",
+        "price": 295,
+        "seller": "bro1010"
+      }
+    ]
+  },
+  "modal": {
+    "accountRequirements": {
+      "title": "Account Requirements",
+      "description": "Please ensure your account follows our requirements to receive your limited item",
+      "requirements": [
+        {
+          "title": "Account Has",
+          "subtitle": "Premium"
+        },
+        {
+          "title": "Owns Small", 
+          "subtitle": "(Under 1.5k)"
+        },
+        {
+          "title": "Public Trades",
+          "subtitle": "& Inventory"
+        }
+      ]
+    },
+    "searchStep": {
+      "title": "What is your in-game Username?",
+      "placeholder": "Search your account...",
+      "buttonText": "Search"
+    },
+    "paymentMethods": [
+      {
+        "id": "bitcoin",
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "image": "/src/assets/bitcoin.png",
+        "address": "bc1q9ajlqrj83luxykz3lfqvjpet8l80n4q0js4ppw",
+        "qrCode": "/src/assets/bitcoin-qrcode.png"
+      },
+      {
+        "id": "litecoin", 
+        "name": "Litecoin",
+        "symbol": "LTC",
+        "image": "/src/assets/litcoin.png",
+        "address": "LUE7m62uBe1WzDKjPSPgbAokfzHtN1atwm",
+        "qrCode": "/src/assets/litecoin.png"
+      },
+      {
+        "id": "crypto",
+        "name": "Crypto",
+        "symbol": "(ETH, USDC and more)",
+        "images": [
+          "/src/assets/etheruim.png",
+          "/src/assets/crypto4.png", 
+          "/src/assets/crypto 3.png"
+        ],
+        "address": "0xCA334c1f9aF04BC525b1D1E86c88d25A927B09b3",
+        "qrCode": "/src/assets/eth-qrcode.png"
+      }
+    ],
+    "transactionMessages": {
+      "step2": "The item you purchase will be sent for the smallest tradeable limited in your inventory.",
+      "step3Warning": "You should only send {CURRENCY} to this address. If you attempt to send any other cryptocurrency, your funds will be lost. Payments may take up to 2 network confirmations to confirm. If you have any issues, please contact support.",
+      "step3Info": "The item you purchase will be sent for the smallest tradeable limited in your inventory.",
+      "backButton": "Back",
+      "copyButton": "Copy"
+    },
+    "items": {
+      "playfulVampire": {
+        "name": "Playful Vampire",
+        "rap": "101K+",
+        "buyer": "unknown",
+        "price": 295
+      },
+      "clockworksShades": {
+        "name": "Clockwork's Shades", 
+        "rap": "1.9M",
+        "buyer": "twizwound",
+        "price": 295
+      }
+    },
+    "error": {
+      "title": "Error",
+      "message": "You need to have at least a small limited (under 1,500 R$ in RAP).",
+      "buttonText": "Try Again"
+    },
+    "disclaimer": "Adurite.com's services are not the same, similar or equivalent to Roblox Corporation's products and services and we are not sponsored by, affiliated with, approved by and/or authorized by ROBLOX Corporation whatsoever. This limited item purchase is facilitated via a player to player trade to you, and is not directly from the platform or officially from the site/corporation."
+  },
+  "footer": {
+    "companyInfo": {
+      "name": "2024 ADURITE LIMITED",
+      "address": [
+        "Unit 8, 3/F, Qwomar Trading Complex,",
+        "Blackburne Road, Port Purcell Road",
+        "Town, Tortola, British Virgin Islands VG1110"
+      ],
+      "email": "help@adurite.com"
+    },
+    "links": {
+      "column1": [
+        { "label": "Home", "url": "#" },
+        { "label": "Support", "url": "#" },
+        { "label": "Privacy Policy", "url": "#" },
+        { "label": "Terms of Service", "url": "#" }
+      ],
+      "column2": [
+        { "label": "Market", "url": "#" },
+        { "label": "History", "url": "#" },
+        { "label": "Affiliate", "url": "#" },
+        { "label": "Claims", "url": "#" }
+      ]
+    },
+    "social": {
+      "title": "Socials",
+      "platforms": ["Github", "Twitter", "Youtube"]
+    },
+    "copyright": "Adurite © 2024 - Not affiliated in any way with the Roblox Corporation or any of its trademarks.",
+    "disclaimer": "Adurite.com's services are not the same, similar or equivalent to Roblox Corporation's products and services and we are not sponsored by, affiliated with, approved by and/or authorized by ROBLOX Corporation whatsoever. Adurite.com is a community led player to player marketplace which is operated by P2P limited item trades purchased by and sold by users, not directly from the platform or officially from the corporation's platform."
+  }
+}

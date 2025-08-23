@@ -27,6 +27,30 @@ import {
   Search
 } from 'lucide-react';
 
+// Import the content JSON
+import contentData from './content/items.json';
+
+// Image mapping for dynamic loading
+const imageMap: Record<string, string> = {
+  '/src/assets/banner-roblux.png': banner,
+  '/src/assets/CS2.png': CS,
+  '/src/assets/discord2logo.png': discord,
+  '/src/assets/DOTA2.png': DOTA,
+  '/src/assets/ingame.png': ingame,
+  '/src/assets/limiteds.png': limited,
+  '/src/assets/logo.png': logo,
+  '/src/assets/roblux-face.png': robluxface,
+  '/src/assets/rust.png': rust,
+  '/src/assets/bitcoin.png': bitcoin,
+  '/src/assets/litcoin.png': litcoin,
+  '/src/assets/etheruim.png': ethereum,
+  '/src/assets/crypto 3.png': crypto3,
+  '/src/assets/crypto4.png': crypto4,
+  '/src/assets/litecoin.png': litecoin,
+  '/src/assets/bitcoin-qrcode.png': qrcode,
+  '/src/assets/eth-qrcode.png': eth
+};
+
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchUsername, setSearchUsername] = useState('');
@@ -36,21 +60,17 @@ function App() {
   const [transactionId, setTransactionId] = useState('');
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
-  // Auto-scroll banners on mobile
- 
-
   // Auto-scroll reviews on mobile
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentReviewIndex((prev) => (prev + 1) % 3); // 3 review items
-    }, 1000); // Change every 4 seconds
+      setCurrentReviewIndex((prev) => (prev + 1) % contentData.trustpilot.mobileReviews.length);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const handleSearch = () => {
     if (searchUsername.trim()) {
-      // Simulate successful search - proceed to payment step
       setCurrentStep(2);
     }
   };
@@ -74,39 +94,31 @@ function App() {
     navigator.clipboard.writeText(text);
   };
 
-  const paymentInfo: Record<string, { address: string; qr: string }> = {
-  bitcoin: {
-    address: "bc1q9ajlqrj83luxykz3lfqvjpet8l80n4q0js4ppw",
-    qr: qrcode,
-  },
-  litecoin: {
-    address: "LUE7m62uBe1WzDKjPSPgbAokfzHtN1atwm",
-    qr: litecoin,
-  },
-  crypto: {
-    address: "0xCA334c1f9aF04BC525b1D1E86c88d25A927B09b3",
-    qr: eth,
-  },
-};
-
+  // Create payment info from content data
+  const paymentInfo: Record<string, { address: string; qr: string }> = {};
+  contentData.modal.paymentMethods.forEach(method => {
+    paymentInfo[method.id] = {
+      address: method.address,
+      qr: imageMap[method.qrCode]
+    };
+  });
 
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
           <div className="p-4 sm:p-6">
-          
             {/* Username Search */}
             <div className="mb-6 sm:mb-8">
               <h4 className="text-lg font-medium text-white mb-4 text-center">
-                What is your in-game Username?
+                {contentData.modal.searchStep.title}
               </h4>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                 <div className="flex-1 relative">
                   <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="Search your account..."
+                    placeholder={contentData.modal.searchStep.placeholder}
                     value={searchUsername}
                     onChange={(e) => setSearchUsername(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-red-500"
@@ -116,7 +128,7 @@ function App() {
                   onClick={handleSearch}
                   className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium text-white transition-colors"
                 >
-                  Search
+                  {contentData.modal.searchStep.buttonText}
                 </button>
               </div>
             </div>
@@ -124,34 +136,28 @@ function App() {
             {/* Account Requirements */}
             <div className="mb-6">
               <h4 className="text-lg font-medium text-white mb-3 text-center">
-                Account Requirements
+                {contentData.modal.accountRequirements.title}
               </h4>
               <p className="text-gray-400 text-center mb-6 text-sm">
-                Please ensure your account follows our requirements to receive your limited item
+                {contentData.modal.accountRequirements.description}
               </p>
               
               <div className="flex justify-between items-center mb-6">
-                <div className="text-center flex-1">
-                  <div className="text-white font-medium text-xs sm:text-sm">Account Has</div>
-                  <div className="text-white font-medium text-xs sm:text-sm">Premium</div>
-                </div>
-                <div className="text-center flex-1">
-                  <div className="text-white font-medium text-xs sm:text-sm">Owns Small</div>
-                  <div className="text-white font-medium text-xs sm:text-sm">(Under 1.5k)</div>
-                </div>
-                <div className="text-center flex-1">
-                  <div className="text-white font-medium text-xs sm:text-sm">Public Trades</div>
-                  <div className="text-white font-medium text-xs sm:text-sm">& Inventory</div>
-                </div>
+                {contentData.modal.accountRequirements.requirements.map((req, index) => (
+                  <div key={index} className="text-center flex-1">
+                    <div className="text-white font-medium text-xs sm:text-sm">{req.title}</div>
+                    <div className="text-white font-medium text-xs sm:text-sm">{req.subtitle}</div>
+                  </div>
+                ))}
               </div>
               
               {/* Dotted line connecting requirements */}
               <div className="relative">
                 <div className="absolute top-1/2 left-0 right-0 h-0.5 border-t-2 border-dotted border-red-500 transform -translate-y-1/2"></div>
                 <div className="flex justify-between relative">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  {contentData.modal.accountRequirements.requirements.map((_, index) => (
+                    <div key={index} className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -163,60 +169,44 @@ function App() {
           <div className="p-4 sm:p-6">
             {/* Item Header */}
             <div className="text-center mb-6 sm:mb-8">
-              <h3 className="text-xl font-bold text-white mb-2">Playful Vampire</h3>
-              <p className="text-gray-400 text-sm mb-1">RAP: 101K+</p>
-              <p className="text-gray-400 text-sm mb-6">Buyer: unknown</p>
+              <h3 className="text-xl font-bold text-white mb-2">{contentData.modal.items.playfulVampire.name}</h3>
+              <p className="text-gray-400 text-sm mb-1">RAP: {contentData.modal.items.playfulVampire.rap}</p>
+              <p className="text-gray-400 text-sm mb-6">Buyer: {contentData.modal.items.playfulVampire.buyer}</p>
               
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">$295<span className="text-gray-400">.00</span></div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">${contentData.modal.items.playfulVampire.price}<span className="text-gray-400">.00</span></div>
               
               <p className="text-gray-300 text-sm mb-6 sm:mb-8">Please select a payment method:</p>
             </div>
 
             {/* Payment Methods */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 sm:mb-8">
-              {/* Bitcoin */}
-              <button
-                onClick={() => handlePaymentSelect('bitcoin')}
-                className="bg-gray-800 hover:bg-gray-700 rounded-lg p-4 sm:p-6 text-center transition-colors border-2 border-transparent hover:border-orange-500"
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 flex items-center justify-center">
-                  <img src={bitcoin} alt="Bitcoin" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-                </div>
-                <div className="text-white font-medium text-sm sm:text-base mb-1">Bitcoin</div>
-                <div className="text-gray-400 text-xs sm:text-sm">BTC</div>
-              </button>
-
-              {/* Litecoin */}
-              <button
-                onClick={() => handlePaymentSelect('litecoin')}
-                className="bg-gray-800 hover:bg-gray-700 rounded-lg p-4 sm:p-6 text-center transition-colors border-2 border-transparent hover:border-blue-500"
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 flex items-center justify-center">
-                  <img src={litcoin} alt="Litecoin" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-                </div>
-                <div className="text-white font-medium text-sm sm:text-base mb-1">Litecoin</div>
-                <div className="text-gray-400 text-xs sm:text-sm">LTC</div>
-              </button>
-
-              {/* Crypto */}
-              <button
-                onClick={() => handlePaymentSelect('crypto')}
-                className="bg-gray-800 hover:bg-gray-700 rounded-lg p-4 sm:p-6 text-center transition-colors border-2 border-transparent hover:border-green-500"
-              >
-                <div className="flex items-center justify-center space-x-1 sm:space-x-2 mb-3">
-                  <img src={ethereum} alt="Ethereum" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
-                  <img src={crypto4} alt="Crypto" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
-                  <img src={crypto3} alt="Crypto" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
-                </div>
-                <div className="text-white font-medium text-sm sm:text-base mb-1">Crypto</div>
-                <div className="text-gray-400 text-xs">(ETH, USDC and more)</div>
-              </button>
+              {contentData.modal.paymentMethods.map((method) => (
+                <button
+                  key={method.id}
+                  onClick={() => handlePaymentSelect(method.id)}
+                  className="bg-gray-800 hover:bg-gray-700 rounded-lg p-4 sm:p-6 text-center transition-colors border-2 border-transparent hover:border-orange-500"
+                >
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 flex items-center justify-center">
+                    {method.id === 'crypto' ? (
+                      <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+                        {method.images?.map((img, index) => (
+                          <img key={index} src={imageMap[img]} alt="Crypto" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
+                        ))}
+                      </div>
+                    ) : (
+                      <img src={imageMap[method.image]} alt={method.name} className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
+                    )}
+                  </div>
+                  <div className="text-white font-medium text-sm sm:text-base mb-1">{method.name}</div>
+                  <div className="text-gray-400 text-xs sm:text-sm">{method.symbol}</div>
+                </button>
+              ))}
             </div>
             
             {/* Transaction Info */}
             <div className="text-center mb-6">
               <p className="text-gray-300 text-sm mb-4">
-                The item you purchase will be sent for the smallest tradeable limited in your inventory.
+                {contentData.modal.transactionMessages.step2}
               </p>
               <p className="text-gray-400 text-sm mb-6">
                 Transaction ID - {transactionId}
@@ -226,25 +216,22 @@ function App() {
         );
 
       case 3:
+        const selectedPaymentMethod = contentData.modal.paymentMethods.find(p => p.id === selectedPayment);
         return (
           <div className="p-4 sm:p-6">
             {/* Item Header */}
             <div className="text-center mb-6">
-              <h3 className="text-xl font-bold text-white mb-2">Clockwork's Shades</h3>
-              <p className="text-gray-400 text-sm mb-1">RAP: 1.9M</p>
-              <p className="text-gray-400 text-sm mb-6">Buyer: twizwound</p>
+              <h3 className="text-xl font-bold text-white mb-2">{contentData.modal.items.clockworksShades.name}</h3>
+              <p className="text-gray-400 text-sm mb-1">RAP: {contentData.modal.items.clockworksShades.rap}</p>
+              <p className="text-gray-400 text-sm mb-6">Buyer: {contentData.modal.items.clockworksShades.buyer}</p>
               
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">$295<span className="text-gray-400">.00</span></div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-6">${contentData.modal.items.clockworksShades.price}<span className="text-gray-400">.00</span></div>
               
               <p className="text-gray-300 text-sm leading-relaxed mb-6 sm:mb-8 max-w-lg mx-auto px-2">
-                You should only send {selectedPayment.toUpperCase()} to this address. If you attempt to send any other 
-                cryptocurrency, your funds will be lost. Payments may take up to 2 network 
-                confirmations to confirm. If you have any issues, please contact support.
+                {contentData.modal.transactionMessages.step3Warning.replace('{CURRENCY}', selectedPaymentMethod?.symbol.toUpperCase() || selectedPayment.toUpperCase())}
               </p>
             </div>
 
-            {/* QR Code */}
-            {/* QR Code */}
             {/* QR Code */}
             <div className="flex justify-center mb-6">
               <div className="w-40 h-40 sm:w-48 sm:h-48 bg-white p-3 sm:p-4 rounded-lg">
@@ -266,12 +253,10 @@ function App() {
                   onClick={() => copyToClipboard(paymentInfo[selectedPayment]?.address || "")}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition-colors whitespace-nowrap"
                 >
-                  Copy
+                  {contentData.modal.transactionMessages.copyButton}
                 </button>
               </div>
             </div>
-
-
 
             {/* Back Button */}
             <div className="flex justify-center mb-6">
@@ -279,14 +264,14 @@ function App() {
                 onClick={() => setCurrentStep(2)}
                 className="px-6 sm:px-8 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium text-white transition-colors"
               >
-                Back
+                {contentData.modal.transactionMessages.backButton}
               </button>
             </div>
 
             {/* Transaction Info */}
             <div className="text-center mb-6">
               <p className="text-gray-300 text-sm mb-4 px-2">
-                The item you purchase will be sent for the smallest tradeable limited in your inventory.
+                {contentData.modal.transactionMessages.step3Info}
               </p>
               <p className="text-gray-400 text-sm mb-6">
                 Transaction ID - {transactionId}
@@ -314,25 +299,28 @@ function App() {
             {/* Navigation */}
             <nav className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                <a href="https://adurite.com/" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Market</a>
-                <a href="https://adurite.com/market/dota2" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Support</a>
-                <a href="https://adurite.com/market/transactions/aff-analytics" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Affiliate</a>
-                <a href="https://adurite.com/claims" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Claims</a>
+                {contentData.header.navigation.map((item, index) => (
+                  <a key={index} href={item.url} className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+                    {item.label}
+                  </a>
+                ))}
               </div>
             </nav>
 
             {/* Right side buttons */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <button className="hidden sm:flex items-center space-x-2 px-3 sm:px-4 py-2 bg-black border border-red-600 rounded-md hover:bg-red-600/20 transition-colors">
-                <img 
-                  src={discord}
-                  alt="Discord logo"
-                  className="w-4 h-4"
-                />
-                <span className="text-sm">Discord</span>
-              </button>
+              {contentData.header.discordButton.enabled && (
+                <button className="hidden sm:flex items-center space-x-2 px-3 sm:px-4 py-2 bg-black border border-red-600 rounded-md hover:bg-red-600/20 transition-colors">
+                  <img 
+                    src={discord}
+                    alt="Discord logo"
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm">{contentData.header.discordButton.text}</span>
+                </button>
+              )}
               <button className="px-3 sm:px-6 py-2 bg-red-600 hover:bg-red-700 rounded-md font-medium transition-colors text-sm">
-                Log in
+                {contentData.header.loginButton.text}
               </button>
             </div>
           </div>
@@ -340,90 +328,37 @@ function App() {
       </header>
 
       {/* Game Categories */}
-      {/* Banner Section */}
-      {/* Mobile Carousel */}
       {/* Desktop Banner */}
-<div className="hidden md:flex justify-center space-x-4">
-  {/* LIMITEDS */}
-  <a href="https://adurite.com/">
-    <div className="w-32 h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-      <img src={limited} alt="Limiteds" className="w-full h-full object-cover" />
-    </div>
-  </a>
-
-  {/* CS:2 */}
-  <a href="https://adurite.com/market/csgo">
-    <div className="w-32 h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-      <img src={CS} alt="CS:2" className="w-full h-full object-cover" />
-    </div>
-  </a>
-
-  {/* DOTA2 */}
-  <a href="https://adurite.com/market/dota2">
-    <div className="w-32 h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-      <img src={DOTA} alt="DOTA2" className="w-full h-full object-cover" />
-    </div>
-  </a>
-
-  {/* Rust */}
-  <a href="https://adurite.com/market/rust">
-    <div className="w-32 h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-      <img src={rust} alt="Rust" className="w-full h-full object-cover" />
-    </div>
-  </a>
-
-  {/* In-Game */}
-  <a href="https://roskins.com/">
-    <div className="w-32 h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-      <img src={ingame} alt="In-Game" className="w-full h-full object-cover" />
-    </div>
-  </a>
-</div>
-
-{/* Mobile Carousel */}
-<div className="block md:hidden overflow-x-auto">
-  <div className="flex flex-nowrap space-x-3">
-    {/* Same items but smaller */}
-    <a href="https://adurite.com/">
-      <div className="min-w-[8rem] h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-        <img src={limited} alt="Limiteds" className="w-full h-full object-cover" />
+      <div className="hidden md:flex justify-center space-x-4">
+        {contentData.gameCategories.map((category, index) => (
+          <a key={index} href={category.url}>
+            <div className="w-32 h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
+              <img src={imageMap[category.image]} alt={category.name} className="w-full h-full object-cover" />
+            </div>
+          </a>
+        ))}
       </div>
-    </a>
 
-    <a href="https://adurite.com/market/csgo">
-      <div className="min-w-[8rem] h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-        <img src={CS} alt="CS:2" className="w-full h-full object-cover" />
+      {/* Mobile Carousel */}
+      <div className="block md:hidden overflow-x-auto">
+        <div className="flex flex-nowrap space-x-3">
+          {contentData.gameCategories.map((category, index) => (
+            <a key={index} href={category.url}>
+              <div className="min-w-[8rem] h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
+                <img src={imageMap[category.image]} alt={category.name} className="w-full h-full object-cover" />
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
-    </a>
-
-    <a href="https://adurite.com/market/dota2">
-      <div className="min-w-[8rem] h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-        <img src={DOTA} alt="DOTA2" className="w-full h-full object-cover" />
-      </div>
-    </a>
-
-    <a href="https://adurite.com/market/rust">
-      <div className="min-w-[8rem] h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-        <img src={rust} alt="Rust" className="w-full h-full object-cover" />
-      </div>
-    </a>
-
-    <a href="https://roskins.com/">
-      <div className="min-w-[8rem] h-24 rounded-lg overflow-hidden bg-black flex items-center justify-center">
-        <img src={ingame} alt="In-Game" className="w-full h-full object-cover" />
-      </div>
-    </a>
-  </div>
-</div>
 
       {/* Trustpilot Reviews */}
       <div className="bg-[#0e0e0e] border-b border-[#1a1a1a]">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4">
           {/* Desktop view */}
           <div className="hidden sm:flex items-center justify-center space-x-4 text-sm">
-            
             {/* Left Text */}
-            <span className="text-gray-300">Our customers say</span>
+            <span className="text-gray-300">{contentData.trustpilot.leftText}</span>
 
             {/* Red Star Boxes */}
             <div className="flex items-center space-x-1">
@@ -445,7 +380,7 @@ function App() {
             </div>
 
             {/* Review Text */}
-            <span className="text-white">4.2 out of 5 based on 531 reviews</span>
+            <span className="text-white">{contentData.trustpilot.rating}</span>
 
             {/* Trustpilot Green Star + Text */}
             <div className="flex items-center space-x-1">
@@ -468,54 +403,51 @@ function App() {
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentReviewIndex * 100}%)` }}
               >
-                {/* Review 1 */}
-                <div className="w-full flex-shrink-0 flex flex-col items-center justify-center text-sm px-4">
-                  <span className="text-gray-300 mb-2">Our customers say</span>
-                  <div className="flex items-center space-x-1 mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-red-600 w-4 h-4 flex items-center justify-center"
-                      >
+                {contentData.trustpilot.mobileReviews.map((review, index) => (
+                  <div key={index} className="w-full flex-shrink-0 flex flex-col items-center justify-center text-sm px-4">
+                    <span className="text-gray-300 mb-2">{review.text}</span>
+                    {review.subtitle && (
+                      <span className="text-white">{review.subtitle}</span>
+                    )}
+                    {index === 0 && (
+                      <div className="flex items-center space-x-1 mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="bg-red-600 w-4 h-4 flex items-center justify-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="white"
+                              className="w-2.5 h-2.5"
+                            >
+                              <path d="M12 2l2.39 7.26h7.63l-6.18 4.49 2.39 7.26L12 16.51l-6.18 4.5 2.39-7.26-6.18-4.49h7.63z" />
+                            </svg>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {index === 1 && (
+                      <div className="flex items-center space-x-1">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
-                          fill="white"
-                          className="w-2.5 h-2.5"
+                          fill="currentColor"
+                          className="w-4 h-4 text-green-500"
                         >
                           <path d="M12 2l2.39 7.26h7.63l-6.18 4.49 2.39 7.26L12 16.51l-6.18 4.5 2.39-7.26-6.18-4.49h7.63z" />
                         </svg>
+                        <span className="text-green-500 font-semibold">Trustpilot</span>
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
-
-                {/* Review 2 */}
-                <div className="w-full flex-shrink-0 flex flex-col items-center justify-center text-sm px-4">
-                  <span className="text-white mb-2">4.2 out of 5 based on 531 reviews</span>
-                  <div className="flex items-center space-x-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-4 h-4 text-green-500"
-                    >
-                      <path d="M12 2l2.39 7.26h7.63l-6.18 4.49 2.39 7.26L12 16.51l-6.18 4.5 2.39-7.26-6.18-4.49h7.63z" />
-                    </svg>
-                    <span className="text-green-500 font-semibold">Trustpilot</span>
-                  </div>
-                </div>
-
-                {/* Review 3 */}
-                <div className="w-full flex-shrink-0 flex flex-col items-center justify-center text-sm px-4">
-                  <span className="text-gray-300 mb-2">Trusted by thousands</span>
-                  <span className="text-white">Secure & Fast Trading</span>
-                </div>
+                ))}
               </div>
               
               {/* Dots indicator */}
               <div className="flex justify-center mt-3 space-x-2">
-                {[0, 1, 2].map((index) => (
+                {contentData.trustpilot.mobileReviews.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentReviewIndex(index)}
@@ -533,7 +465,7 @@ function App() {
       {/* Hero Section */}
       <div
         className="relative h-32 sm:h-48 bg-cover bg-center"
-        style={{ backgroundImage: `url(${banner})` }}
+        style={{ backgroundImage: `url(${imageMap[contentData.hero.bannerImage]})` }}
       >
       </div>
 
@@ -548,57 +480,56 @@ function App() {
             </div>
           </div>
           <div>
-            <h1 className="text-2xl sm:text-4xl font-bold text-white">bro1010</h1>
+            <h1 className="text-2xl sm:text-4xl font-bold text-white">{contentData.profile.username}</h1>
           </div>
         </div>
       </div>
 
       {/* LIMITEDS Section */}
-     <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-8 sm:py-12">
-      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
-        LIMITEDS
-      </h2>
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-8 sm:py-12">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
+          {contentData.limiteds.sectionTitle}
+        </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-        <div
-          className="group bg-[#1c1c1c] rounded-lg p-3 sm:p-6 cursor-pointer overflow-hidden relative flex flex-col"
-          onClick={() => setIsModalOpen(true)}
-        >
-          {/* Image */}
-          <div className="w-full h-32 sm:h-40 rounded-lg mb-3 overflow-hidden bg-[#1c1c1c] flex items-center justify-center">
-            <img
-              src={robluxface}
-              alt="Playful Vampire"
-              className="max-h-24 sm:max-h-36 object-contain"
-            />
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          {contentData.limiteds.items.map((item) => (
+            <div
+              key={item.id}
+              className="group bg-[#1c1c1c] rounded-lg p-3 sm:p-6 cursor-pointer overflow-hidden relative flex flex-col"
+              onClick={() => setIsModalOpen(true)}
+            >
+              {/* Image */}
+              <div className="w-full h-32 sm:h-40 rounded-lg mb-3 overflow-hidden bg-[#1c1c1c] flex items-center justify-center">
+                <img
+                  src={imageMap[item.image]}
+                  alt={item.name}
+                  className="max-h-24 sm:max-h-36 object-contain"
+                />
+              </div>
 
-          {/* Title */}
-          <h3 className="text-white font-semibold mb-2 text-sm sm:text-base text-center">
-            Playful Vampire
-          </h3>
+              {/* Title */}
+              <h3 className="text-white font-semibold mb-2 text-sm sm:text-base text-center">
+                {item.name}
+              </h3>
 
-          {/* RAP & Price */}
-          <div className="flex justify-between items-center text-center">
-            <div>
-              <div className="text-red-400 text-xs sm:text-sm font-semibold">RAP</div>
-              <div className="text-white font-bold text-sm sm:text-base">101K+</div>
+              {/* RAP & Price */}
+              <div className="flex justify-between items-center text-center">
+                <div>
+                  <div className="text-red-400 text-xs sm:text-sm font-semibold">RAP</div>
+                  <div className="text-white font-bold text-sm sm:text-base">{item.rap}</div>
+                </div>
+                <div>
+                  <div className="text-red-400 text-xs sm:text-sm font-semibold">Price</div>
+                  <div className="text-white font-bold text-sm sm:text-base">${item.price}</div>
+                </div>
+              </div>
+
+              {/* Animated bottom border */}
+              <span className="absolute left-0 bottom-0 h-1 bg-red-500 w-0 transition-all duration-300 group-hover:w-full"></span>
             </div>
-            <div>
-              <div className="text-red-400 text-xs sm:text-sm font-semibold">Price</div>
-              <div className="text-white font-bold text-sm sm:text-base">$295</div>
-            </div>
-          </div>
-
-          {/* Animated bottom border */}
-          <span className="absolute left-0 bottom-0 h-1 bg-red-500 w-0 transition-all duration-300 group-hover:w-full"></span>
+          ))}
         </div>
-      </div>
-    </main>
-
-
-
-
+      </main>
 
       {/* Footer */}
       <footer className="bg-zinc-900 border-t border-gray-800 mt-16">
@@ -619,27 +550,33 @@ function App() {
             {/* Links Column 1 */}
             <div>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Home</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Support</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a></li>
+                {contentData.footer.links.column1.map((link, index) => (
+                  <li key={index}>
+                    <a href={link.url} className="text-gray-400 hover:text-white transition-colors text-sm">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Links Column 2 */}
             <div>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Market</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">History</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Affiliate</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Claims</a></li>
+                {contentData.footer.links.column2.map((link, index) => (
+                  <li key={index}>
+                    <a href={link.url} className="text-gray-400 hover:text-white transition-colors text-sm">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Contact and Social */}
             <div>
               <div className="mb-6">
-                <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">Socials</h3>
+                <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">{contentData.footer.social.title}</h3>
                 <div className="flex space-x-3">
                   <Github className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
                   <Twitter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
@@ -648,16 +585,16 @@ function App() {
               </div>
               
               <div className="text-xs sm:text-sm text-gray-400">
-                <p className="mb-1">Email: help@adurite.com</p>
+                <p className="mb-1">Email: {contentData.footer.companyInfo.email}</p>
                 <p className="font-semibold text-white mb-1">Main Business Address</p>
-                <p className="mb-1">2024 ADURITE LIMITED</p>
-                <p className="mb-1">Unit 8, 3/F, Qwomar Trading Complex,</p>
-                <p className="mb-1">Blackburne Road, Port Purcell Road</p>
-                <p className="mb-4">Town, Tortola, British Virgin Islands VG1110</p>
+                <p className="mb-1">{contentData.footer.companyInfo.name}</p>
+                {contentData.footer.companyInfo.address.map((line, index) => (
+                  <p key={index} className="mb-1">{line}</p>
+                ))}
               </div>
 
               {/* Payment Methods */}
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 mt-4">
                 <div className="w-6 h-4 sm:w-8 sm:h-5 bg-blue-600 rounded flex items-center justify-center text-xs text-white font-bold">M</div>
                 <div className="w-6 h-4 sm:w-8 sm:h-5 bg-red-600 rounded flex items-center justify-center text-xs text-white font-bold">M</div>
                 <div className="w-6 h-4 sm:w-8 sm:h-5 bg-black border border-gray-600 rounded flex items-center justify-center text-xs text-white font-bold">⋯</div>
@@ -669,12 +606,10 @@ function App() {
           {/* Bottom Copyright */}
           <div className="border-t border-gray-800 mt-8 pt-8 text-center">
             <p className="text-gray-400 text-xs sm:text-sm mb-2">
-              Adurite © 2024 - Not affiliated in any way with the Roblox Corporation or any of its trademarks.
+              {contentData.footer.copyright}
             </p>
             <p className="text-gray-500 text-xs leading-relaxed max-w-4xl mx-auto px-2">
-              Adurite.com's services are not the same, similar or equivalent to Roblox Corporation's products and services and we are not sponsored by, affiliated with, approved by and/or authorized by 
-              ROBLOX Corporation whatsoever. Adurite.com is a community led player to player marketplace which is operated by P2P limited item trades purchased by and sold by users, not directly from 
-              the platform or officially from the corporation's platform.
+              {contentData.footer.disclaimer}
             </p>
           </div>
         </div>
@@ -728,19 +663,19 @@ function App() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg sm:text-xl font-bold text-white">
-                    {currentStep === 1 ? 'Playful Vampire' : 'Clockwork\'s Shades'}
+                    {currentStep === 1 ? contentData.modal.items.playfulVampire.name : contentData.modal.items.clockworksShades.name}
                   </h3>
                   <p className="text-gray-400 text-sm">
-                    RAP: {currentStep === 1 ? '101K+' : '1.9M'}
+                    RAP: {currentStep === 1 ? contentData.modal.items.playfulVampire.rap : contentData.modal.items.clockworksShades.rap}
                   </p>
                   <p className="text-gray-400 text-sm">
-                    {currentStep === 1 ? 'Seller: bro1010' : 'Buyer: roblox'}
+                    {currentStep === 1 ? `Seller: ${contentData.modal.items.playfulVampire.buyer}` : `Buyer: ${contentData.modal.items.clockworksShades.buyer}`}
                   </p>
                 </div>
                 <div className="text-right">
                   <div className="text-gray-400 text-xs sm:text-sm">Total</div>
                   <div className="text-red-400 text-lg sm:text-2xl font-bold">
-                    ${currentStep === 1 ? '295' : '10,000'}.00
+                    ${currentStep === 1 ? contentData.modal.items.playfulVampire.price : contentData.modal.items.clockworksShades.price}.00
                   </div>
                 </div>
               </div>
@@ -752,10 +687,7 @@ function App() {
             {/* Disclaimer */}
             <div className="px-4 sm:px-6 pb-4 sm:pb-6">
               <div className="text-xs text-gray-400 text-center leading-relaxed px-2">
-                Adurite.com's services are not the same, similar or equivalent to Roblox Corporation's products 
-                and services and we are not sponsored by, affiliated with, approved by and/or authorized by 
-                ROBLOX Corporation whatsoever. This limited item purchase is facilitated via a player to player 
-                trade to you, and is not directly from the platform or officially from the site/corporation.
+                {contentData.modal.disclaimer}
               </div>
             </div>
           </div>
@@ -772,11 +704,11 @@ function App() {
             </div>
             
             {/* Error Title */}
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Error</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">{contentData.modal.error.title}</h3>
             
             {/* Error Message */}
             <p className="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
-              You need to have at least a small limited (under 1,500 R$ in RAP).
+              {contentData.modal.error.message}
             </p>
             
             {/* Try Again Button */}
@@ -784,7 +716,7 @@ function App() {
               onClick={() => setShowError(false)}
               className="w-full px-4 sm:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold text-white transition-colors text-sm sm:text-base"
             >
-              Try Again
+              {contentData.modal.error.buttonText}
             </button>
           </div>
         </div>
