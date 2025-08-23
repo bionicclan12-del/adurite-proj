@@ -179,6 +179,7 @@ function App() {
             </div>
 
             {/* Payment Methods */}
+            {/* Payment Methods */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 sm:mb-8">
               {contentData.modal.paymentMethods.map((method) => (
                 <button
@@ -187,21 +188,35 @@ function App() {
                   className="bg-gray-800 hover:bg-gray-700 rounded-lg p-4 sm:p-6 text-center transition-colors border-2 border-transparent hover:border-orange-500"
                 >
                   <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 flex items-center justify-center">
-                    {method.id === 'crypto' ? (
+                    {method.id === "crypto" ? (
                       <div className="flex items-center justify-center space-x-1 sm:space-x-2">
                         {method.images?.map((img, index) => (
-                          <img key={index} src={imageMap[img]} alt="Crypto" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" />
+                          <img
+                            key={index}
+                            src={imageMap[img]}
+                            alt="Crypto"
+                            className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
+                          />
                         ))}
                       </div>
                     ) : (
-                      <img src={imageMap[method.image]} alt={method.name} className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
+                      method.image && (
+                        <img
+                          src={imageMap[method.image]}
+                          alt={method.name}
+                          className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                        />
+                      )
                     )}
                   </div>
-                  <div className="text-white font-medium text-sm sm:text-base mb-1">{method.name}</div>
+                  <div className="text-white font-medium text-sm sm:text-base mb-1">
+                    {method.name}
+                  </div>
                   <div className="text-gray-400 text-xs sm:text-sm">{method.symbol}</div>
                 </button>
               ))}
             </div>
+
             
             {/* Transaction Info */}
             <div className="text-center mb-6">
